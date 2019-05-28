@@ -51,15 +51,19 @@ public class Tetris implements GameLogic {
 			}
 		}
 		//Button left pressed
-		if(Input.keys[Input.KEY_LEFT]) {
+		if(Input.keys[Input.KEY_LEFT] && !Input.keys[Input.KEY_RIGHT]) {
 			if(currentBlock != null && canMove()) {
-				currentBlock.changePosition(-SubBlock.getWidth(), 0);
+				currentBlock.setPosition(
+						currentBlock.getPosition().x - SubBlock.getWidth(),
+						currentBlock.getPosition().y);
 			}	
 		}
 		//Button right pressed
-		if(Input.keys[Input.KEY_RIGHT]) {
+		if(Input.keys[Input.KEY_RIGHT] && !Input.keys[Input.KEY_LEFT]) {
 			if(currentBlock != null && canMove()) {
-				currentBlock.changePosition(SubBlock.getWidth(), 0);
+				currentBlock.setPosition(
+						currentBlock.getPosition().x + SubBlock.getWidth(),
+						currentBlock.getPosition().y);
 			}
 		}
 	}
