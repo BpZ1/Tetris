@@ -1,2 +1,8 @@
 #Path	width	height tile-width tile-height	
 res/blockYellow.png 100 100 100 100
+res/blockRed.png 100 100 100 100
+res/blockBlue.png 100 100 100 100
+res/blockGreen.png 100 100 100 100
+res/blockLightBlue.png 100 100 100 100
+res/blockViolett.png 100 100 100 100
+res/blockOrange.png 100 100 100 100
