@@ -13,6 +13,8 @@ import engine.textures.manager.TextureManager;
 import exceptions.InvalidFileException;
 import tetris.blocks.Block;
 import tetris.blocks.BlockSquare;
+import tetris.blocks.BlockZ1;
+import tetris.blocks.BlockZ2;
 
 public class Tetris implements GameLogic {
 
@@ -27,10 +29,12 @@ public class Tetris implements GameLogic {
 	
 	@Override
 	public void update() {
+		if(currentBlock != null) {
+			currentBlock.changePosition(0f, -0.1f);
+		}
 		//Button down pressed
 		if(Input.keys[Input.KEY_DOWN]) {
 			if(currentBlock != null) {
-				System.out.println("Pos:" + currentBlock.getPosition().y);
 				currentBlock.changePosition(0f, -0.1f);
 			}
 		}
@@ -59,7 +63,7 @@ public class Tetris implements GameLogic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		BlockSquare test = new BlockSquare();
+		Block test = new BlockZ2();
 		currentBlock = test;
 		manager = Engine.getSceneManager();
 		manager.addGameObject(test);
