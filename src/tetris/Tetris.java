@@ -11,6 +11,7 @@ import engine.math.Vector3f;
 import engine.objects.scene.SceneManager;
 import engine.textures.manager.TextureManager;
 import exceptions.InvalidFileException;
+import tetris.blocks.Background;
 import tetris.blocks.Block;
 import tetris.blocks.BlockI;
 import tetris.blocks.BlockSquare;
@@ -20,6 +21,8 @@ import tetris.blocks.SubBlock;
 
 public class Tetris implements GameLogic {
 
+	public static final float SCALE = 0.5f ;
+	private static final int FIELD_WIDTH_NUMBER = 10;
 	private static final long ROTATION_CD = 100;
 	private static final long MOVE_CD = 100;
 	private long lastRotation = 0;
@@ -27,6 +30,8 @@ public class Tetris implements GameLogic {
 	private SceneManager manager;
 	private Block currentBlock;
 	private Engine engine;
+	
+	private Background background;
 	
 	public void start() {
 		this.engine = new Engine(Resolution.HD, this, 60);
@@ -99,11 +104,14 @@ public class Tetris implements GameLogic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		background = new Background();
+		background.changePosition(0, 0, -1);
 		Block test = new BlockI();
+		test.setPosition(SubBlock.getWidth()/2, 0);
 		currentBlock = test;
 		manager = Engine.getSceneManager();
+		manager.addGameObject(background);
 		manager.addGameObject(test);
-		this.engine.setSetBackgroundColor(Color.white());
 	}
 
 	@Override
