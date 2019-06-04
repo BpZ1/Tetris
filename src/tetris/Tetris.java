@@ -1,6 +1,7 @@
 package tetris;
 
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 import engine.Engine;
 import engine.GameLogic;
@@ -11,9 +12,10 @@ import engine.math.Vector3f;
 import engine.objects.scene.SceneManager;
 import engine.textures.manager.TextureManager;
 import exceptions.InvalidFileException;
-import tetris.blocks.Background;
 import tetris.blocks.Block;
 import tetris.blocks.BlockI;
+import tetris.blocks.BlockL1;
+import tetris.blocks.BlockL2;
 import tetris.blocks.BlockSquare;
 import tetris.blocks.BlockZ1;
 import tetris.blocks.BlockZ2;
@@ -28,14 +30,72 @@ public class Tetris implements GameLogic {
 	private long lastRotation = 0;
 	private long lastMove = 0;
 	private SceneManager manager;
-	private Block currentBlock;
 	private Engine engine;
 	
+	private boolean gameStarted = false;
+	private Block currentBlock;
+	private Block nextBlock;
 	private Background background;
+	private Random random = new Random();
+	
+	private float blockYPosition = SubBlock.getWidth() * 5;
+	private float currentBlockXPosition = SubBlock.getWidth()/2;
+	private float nextBlockXPosition = (FIELD_WIDTH_NUMBER / 2 + 4) * SubBlock.getWidth();
+	
+	private void setCurrentBlock(Block block) {
+		currentBlock = block;
+		currentBlock.setPosition(currentBlockXPosition, blockYPosition);
+	}
+	
+	private void setNextBlock(Block block) {
+		nextBlock = block;
+		nextBlock.setPosition(nextBlockXPosition, blockYPosition);
+	}
 	
 	public void start() {
 		this.engine = new Engine(Resolution.HD, this, 60);
 		this.engine.start();
+	}
+	
+	public void gameStart() {
+		setCurrentBlock(getRandomBlock());
+		setNextBlock(getRandomBlock());
+		
+		manager.addGameObject(currentBlock);
+		manager.addGameObject(nextBlock);
+	}
+	
+	private Block getRandomBlock() {
+		Block block = null;
+		int blockIndex = random.nextInt(5);
+		switch(blockIndex) {
+			case 0:
+				block = new BlockI();
+			break;
+			case 1:
+				block = new BlockSquare();
+			break;
+			case 2:
+				block = new BlockZ1();
+			break;
+			case 3:
+				block = new BlockZ2();
+			break;
+			case 4:
+				block = new BlockL1();
+			break;
+			case 5:
+				block = new BlockL2();
+			break;
+		}
+		
+		return block;
+	}
+	
+	private void spawnBlock() {
+		setCurrentBlock(nextBlock);
+		setNextBlock(getRandomBlock());
+		manager.addGameObject(nextBlock);
 	}
 	
 	@Override
@@ -71,6 +131,13 @@ public class Tetris implements GameLogic {
 						currentBlock.getPosition().y);
 			}
 		}
+		
+		if(Input.keys[Input.KEY_ENTER] && !gameStarted) {
+			gameStart();
+		}
+		if(Input.keys[Input.KEY_1]) {
+			spawnBlock();
+		}
 	}
 	
 	private boolean canRotate() {
@@ -93,6 +160,8 @@ public class Tetris implements GameLogic {
 		}
 	}
 
+	
+	
 	@Override
 	public void init() {
 		try {
@@ -106,12 +175,8 @@ public class Tetris implements GameLogic {
 		}
 		background = new Background();
 		background.changePosition(0, 0, -1);
-		Block test = new BlockI();
-		test.setPosition(SubBlock.getWidth()/2, 0);
-		currentBlock = test;
 		manager = Engine.getSceneManager();
 		manager.addGameObject(background);
-		manager.addGameObject(test);
 	}
 
 	@Override
