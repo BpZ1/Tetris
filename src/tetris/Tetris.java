@@ -37,7 +37,7 @@ public class Tetris implements GameLogic {
 	private Block nextBlock;
 	private Background background;
 	private Random random = new Random();
-	
+	private int currentYPositionIndex = 4;
 	private float blockYPosition = SubBlock.getWidth() * 5;
 	private float currentBlockXPosition = SubBlock.getWidth()/2;
 	private float nextBlockXPosition = (FIELD_WIDTH_NUMBER / 2 + 4) * SubBlock.getWidth();
@@ -45,6 +45,7 @@ public class Tetris implements GameLogic {
 	private void setCurrentBlock(Block block) {
 		currentBlock = block;
 		currentBlock.setPosition(currentBlockXPosition, blockYPosition);
+		currentYPositionIndex = 4;
 	}
 	
 	private void setNextBlock(Block block) {
@@ -117,18 +118,20 @@ public class Tetris implements GameLogic {
 		}
 		//Button left pressed
 		if(Input.keys[Input.KEY_LEFT] && !Input.keys[Input.KEY_RIGHT]) {
-			if(currentBlock != null && canMove()) {
+			if(currentBlock != null && canMove() && currentYPositionIndex > 0) {
 				currentBlock.setPosition(
 						currentBlock.getPosition().x - SubBlock.getWidth(),
 						currentBlock.getPosition().y);
+				currentYPositionIndex--;
 			}	
 		}
 		//Button right pressed
 		if(Input.keys[Input.KEY_RIGHT] && !Input.keys[Input.KEY_LEFT]) {
-			if(currentBlock != null && canMove()) {
+			if(currentBlock != null && canMove() && currentYPositionIndex < 8) {
 				currentBlock.setPosition(
 						currentBlock.getPosition().x + SubBlock.getWidth(),
 						currentBlock.getPosition().y);
+				currentYPositionIndex++;
 			}
 		}
 		
